@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Product } from '../../entities/product.entity';
 @Injectable()
 export class ProductsService {
@@ -19,7 +24,13 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.products.find((item) => item.id === id);
+    const product = this.products.find((item) => item.id === id);
+    // return !product ? null : product;
+    if (!product) {
+      // throw new NotFoundException(`Product #${id} not found`);
+      throw new HttpException(`Product #${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    return product;
   }
 
   create(payload: any) {
@@ -44,7 +55,13 @@ export class ProductsService {
   }
 
   delete(id: number) {
-    this.products = this.products.filter((product) => product.id !== id);
-    return this.products;
+    // this.products = this.products.filter((product) => product.id !== id);
+    // return this.products;
+    const index = this.products.findIndex((i) => i.id === id);
+    if (index === -1) {
+      throw new HttpException(`Product #${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    this.products.splice(index, 1);
+    return new HttpException(`Product #${id} has been deleted`, HttpStatus.OK);
   }
 }
