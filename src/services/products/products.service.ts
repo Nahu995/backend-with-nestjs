@@ -31,4 +31,16 @@ export class ProductsService {
     this.products.push(newProduct);
     return newProduct;
   }
+
+  update(id: number, payload: any) {
+    this.products = this.products.map((product) =>
+      product.id === id ? { ...product, ...payload } : product,
+    );
+    return this.findOne(id);
+  }
+
+  delete(id: number) {
+    this.products.filter((product) => product.id !== id);
+    return this.products;
+  }
 }
