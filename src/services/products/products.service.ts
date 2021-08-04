@@ -33,14 +33,18 @@ export class ProductsService {
   }
 
   update(id: number, payload: any) {
-    this.products = this.products.map((product) =>
-      product.id === id ? { ...product, ...payload } : product,
-    );
-    return this.findOne(id);
+    const product = this.findOne(id);
+    if (product) {
+      const index = this.products.findIndex((product) => product.id === id);
+      this.products[index] = { ...product, ...payload };
+      return this.products[index];
+    } else {
+      return null;
+    }
   }
 
   delete(id: number) {
-    this.products.filter((product) => product.id !== id);
+    this.products = this.products.filter((product) => product.id !== id);
     return this.products;
   }
 }
