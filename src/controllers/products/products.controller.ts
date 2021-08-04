@@ -3,28 +3,28 @@ import {
   Get,
   Param,
   Post,
-  Query,
+  // Query,
   Body,
   Put,
   Delete,
   HttpCode,
   HttpStatus,
-  Res,
+  // Res,
   // ParseIntPipe,
 } from '@nestjs/common';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
-import { Response } from 'express';
+// import { Response } from 'express';
 import { ProductsService } from '../../services/products/products.service';
+import { CreateProductDto, UpdateProductDto } from '../../dtos/products.dto';
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  getProducts(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 0,
-    @Query('brand') brand: string,
-  ) {
+  getProducts() {
+    // @Query('limit') limit = 100,
+    // @Query('offset') offset = 0,
+    // @Query('brand') brand: string,
     // return {
     //   message: `products: limit => ${limit} offset => ${offset} brand => ${brand}`,
     // };
@@ -44,12 +44,12 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateProductDto) {
     return this.productsService.create(payload);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: any) {
+  update(@Param('id') id: string, @Body() payload: UpdateProductDto) {
     return this.productsService.update(+id, payload);
   }
 
